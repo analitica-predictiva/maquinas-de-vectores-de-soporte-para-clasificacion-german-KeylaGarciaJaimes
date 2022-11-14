@@ -203,7 +203,11 @@ def pregunta_03():
     # Importe SVC
     # Importe OneHotEncoder
     # Importe Pipeline
-    from ____ import ____
+    from sklearn.compose import ColumnTransformer
+    from sklearn.compose import make_column_transformer
+    from sklearn import svm
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder
 
     # Cargue las variables.
     X_train, _, y_train, _ = pregunta_02()
@@ -213,23 +217,22 @@ def pregunta_03():
     # columnas numéricas no deben ser transformadas.
     columnTransformer = make_column_transformer(
         (
-            ____(),
-            ____(____=____),
+            OneHotEncoder(),
+            make_column_selector(dtype_include='object'),
         ),
-        remainder=____,
+        remainder="passthrough",
     )
 
     # Cree un pipeline que contenga el columnTransformer y el modelo SVC.
-    pipeline = ____(
+    pipeline = Pipeline(
         steps=[
-            ("____", ____),
-            ("____", ____),
+            ("columnTransformer", columnTransformer),
+            ("SVM", svm.SVC()),
         ],
     )
 
     # Entrene el pipeline con los datos de entrenamiento.
-    ____.____(____, ____)
-
+    pipeline.fit(X_train, y_train)
     # # Retorne el pipeline entrenado
     return pipeline
 
